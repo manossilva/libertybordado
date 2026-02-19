@@ -58,8 +58,8 @@
     <style>
         /* Estilos Customizados: Efeito de Costura e Apple-like */
         body {
-            background-color: #eae7e4;
-            color: #042353;
+            background-color: #042353; /* Cor de fundo da empresa */
+            color: #eae7e4; /* Texto claro por padrão */
             overflow-x: hidden;
         }
 
@@ -68,18 +68,18 @@
             width: 8px;
         }
         ::-webkit-scrollbar-track {
-            background: #eae7e4;
+            background: #042353;
         }
         ::-webkit-scrollbar-thumb {
-            background: #042353;
+            background: #eae7e4;
             border-radius: 4px;
         }
 
         .glass {
-            background: rgba(234, 231, 228, 0.7);
+            background: rgba(4, 35, 83, 0.7);
             backdrop-filter: blur(16px);
             -webkit-backdrop-filter: blur(16px);
-            border-bottom: 1px solid rgba(4, 35, 83, 0.1);
+            border-bottom: 1px solid rgba(234, 231, 228, 0.1);
         }
 
         .glass-dark {
@@ -98,18 +98,18 @@
             content: '';
             position: absolute;
             top: 2px; left: 2px; right: 2px; bottom: 2px;
-            border: 1px dashed rgba(242, 101, 34, 0);
+            border: 1px dashed rgba(242, 101, 34, 0); /* Linha transparente por padrão */
             border-radius: inherit;
             transition: all 0.4s ease;
             pointer-events: none;
         }
         .btn-stitch:hover::before {
-            border-color: rgba(242, 101, 34, 1);
+            border-color: rgba(242, 101, 34, 1); /* Laranja da logo no hover */
             animation: dash 5s linear infinite reverse;
         }
         .btn-stitch:hover {
             transform: translateY(-3px);
-            box-shadow: 0 10px 25px -5px rgba(4, 35, 83, 0.3);
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.3);
         }
 
         /* Animações de Scroll */
@@ -144,93 +144,64 @@
 </head>
 <body class="antialiased selection:bg-brand-orange selection:text-white relative">
 
-    <!-- Navegação / Header -->
-    <header class="fixed top-0 w-full z-40 glass transition-all duration-300" id="header">
-        <div class="max-w-6xl mx-auto px-6 py-4 flex justify-between items-center">
-            <!-- Logo area -->
-            <a href="#" class="flex items-center gap-2 group">
-                <!-- LINK DA LOGO DO CABEÇALHO (Adicione sua URL do Supabase aqui) -->
-                <img src="https://hcdsbawdwzmlujxnxymf.supabase.co/storage/v1/object/public/video%20lp1/download.png" alt="Liberty Bordados Logo" class="h-14 md:h-16 rounded-2xl group-hover:scale-105 transition-transform object-contain" onerror="this.src='data:image/svg+xml;utf8,<svg xmlns=\'http://www.w3.org/2000/svg\' width=\'100\' height=\'40\'><rect width=\'100\' height=\'40\' fill=\'%23042353\'/><text x=\'50\' y=\'25\' font-family=\'Arial\' font-size=\'14\' fill=\'white\' text-anchor=\'middle\'>LIBERTY</text></svg>'">
-            </a>
-
-            <!-- Menu Desktop -->
-            <nav class="hidden md:flex gap-8 items-center font-medium text-sm">
-                <a href="#about" class="hover:text-brand-orange transition-colors">Fabricação</a>
-                <a href="#location" class="hover:text-brand-orange transition-colors">Localização</a>
-                <button onclick="toggleCatalog()" class="text-brand-orange hover:text-brand-blue transition-colors flex items-center gap-1">
-                    <i class="ph ph-books text-lg"></i> Catálogo
-                </button>
-            </nav>
-        </div>
-    </header>
-
     <!-- MAIN HERO & LINKS -->
-    <section id="hero" class="min-h-screen flex flex-col justify-center items-center pt-24 pb-12 px-6 relative overflow-hidden">
+    <section id="hero" class="min-h-screen flex flex-col justify-center items-center py-16 px-6 relative overflow-hidden">
         <!-- Efeito de fundo (Fios de costura abstratos) -->
-        <div class="absolute inset-0 opacity-5 pointer-events-none">
+        <div class="absolute inset-0 opacity-10 pointer-events-none">
             <svg width="100%" height="100%" xmlns="http://www.w3.org/2000/svg">
-                <path d="M-100,200 Q200,50 500,300 T1200,100" fill="none" stroke="#042353" stroke-width="2" stroke-dasharray="10 15"/>
+                <path d="M-100,200 Q200,50 500,300 T1200,100" fill="none" stroke="#eae7e4" stroke-width="2" stroke-dasharray="10 15"/>
                 <path d="M-100,500 Q300,700 700,400 T1500,600" fill="none" stroke="#f26522" stroke-width="1" stroke-dasharray="5 10"/>
             </svg>
         </div>
 
         <div class="max-w-2xl w-full text-center z-10 reveal">
-            <!-- Logo Grande (Dinâmica para o Supabase) -->
-            <div class="mb-8 animate-float flex justify-center w-full max-w-[280px] md:max-w-md mx-auto">
-                 <!-- COLE O LINK DA SUA LOGO DO SUPABASE NO ATRIBUTO 'src' ABAIXO -->
-                 <img src="download.png" alt="Liberty Bordados" class="w-full h-auto object-contain drop-shadow-2xl rounded-3xl" onerror="this.src='https://via.placeholder.com/400x150?text=Sua+Logo+Aqui'">
+            <!-- Logo Grande -->
+            <div class="mb-10 animate-float flex justify-center w-full max-w-[280px] md:max-w-md mx-auto">
+                 <img src="https://hcdsbawdwzmlujxnxymf.supabase.co/storage/v1/object/public/video%20lp1/download.png" alt="Liberty Bordados" class="w-full h-auto object-contain drop-shadow-2xl rounded-3xl border border-white/5">
             </div>
-            
-            <!-- Título Animado Restaurado -->
-            <h1 class="font-heading font-black text-5xl md:text-7xl tracking-tighter flex flex-col items-center mb-6">
-                <span class="bg-clip-text text-transparent bg-gradient-to-r from-brand-blue via-brand-orange to-brand-blue animate-gradient-x bg-[length:200%_auto]">
-                    LIBERTY
-                </span>
-                <span class="text-xl md:text-3xl text-brand-blue mt-2 font-light tracking-widest">BORDADOS</span>
-            </h1>
 
-            <p class="text-lg md:text-xl font-light mb-10 text-brand-blue/80 max-w-lg mx-auto">
+            <p class="text-lg md:text-xl font-light mb-10 text-brand-light/80 max-w-lg mx-auto">
                 Bordados de alta qualidade com tecnologia e precisão. Conecte-se conosco.
             </p>
 
             <!-- Links em Grid -->
             <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 max-w-xl mx-auto">
                 
-                <!-- Botão Catálogo (Destaque) -->
-                <button onclick="toggleCatalog()" class="sm:col-span-2 btn-stitch bg-brand-orange text-white py-4 px-6 rounded-2xl flex items-center justify-center gap-3 font-semibold text-lg hover:bg-[#e05a1b]">
+                <!-- Botão Catálogo (Destaque Laranja da Logo) -->
+                <button onclick="toggleCatalog()" class="sm:col-span-2 btn-stitch bg-brand-orange text-white py-4 px-6 rounded-2xl flex items-center justify-center gap-3 font-bold text-lg hover:bg-[#e05a1b] transition-colors shadow-lg shadow-brand-orange/20">
                     <i class="ph-fill ph-book-open-text text-2xl"></i>
-                    Ver Catálogo Completo
+                    Ver Todos Produtos
                 </button>
 
-                <!-- Botão WhatsApp -->
-                <a href="https://wa.me/seunumerodetelefone" target="_blank" class="btn-stitch bg-brand-blue text-brand-light py-4 px-6 rounded-2xl flex items-center justify-center gap-3 font-semibold hover:bg-[#062f6e]">
-                    <i class="ph-fill ph-whatsapp-logo text-2xl text-green-400"></i>
-                    WhatsApp
+                <!-- Botão WhatsApp (Branco) -->
+                <a href="https://wa.me/seunumerodetelefone" target="_blank" class="btn-stitch bg-white text-brand-blue py-4 px-6 rounded-2xl flex items-center justify-center gap-3 font-semibold hover:bg-gray-100 transition-colors">
+                    <i class="ph-fill ph-whatsapp-logo text-2xl text-green-500"></i>
+                    Compre no Atacado
                 </a>
 
-                <!-- Botão TikTok -->
-                <a href="#" target="_blank" class="btn-stitch bg-brand-blue text-brand-light py-4 px-6 rounded-2xl flex items-center justify-center gap-3 font-semibold hover:bg-[#062f6e]">
-                    <i class="ph-fill ph-tiktok-logo text-2xl"></i>
-                    TikTok
+                <!-- Botão TikTok (Branco) -->
+                <a href="#" target="_blank" class="btn-stitch bg-white text-brand-blue py-4 px-6 rounded-2xl flex items-center justify-center gap-3 font-semibold hover:bg-gray-100 transition-colors">
+                    <i class="ph-fill ph-tiktok-logo text-2xl text-black"></i>
+                    Compre no TikTok
                 </a>
 
-                <!-- Botão Mercado Livre -->
-                <a href="#" target="_blank" class="btn-stitch bg-white text-brand-blue py-4 px-6 rounded-2xl flex items-center justify-center gap-3 font-semibold border border-brand-blue/10 hover:border-brand-blue/30">
+                <!-- Botão Mercado Livre (Branco) -->
+                <a href="#" target="_blank" class="btn-stitch bg-white text-brand-blue py-4 px-6 rounded-2xl flex items-center justify-center gap-3 font-semibold hover:bg-gray-100 transition-colors">
                     <i class="ph-fill ph-handshake text-2xl text-yellow-500"></i>
-                    Mercado Livre
+                    Compre o Mercado Livre
                 </a>
 
-                <!-- Botão Shopee -->
-                <a href="#" target="_blank" class="btn-stitch bg-white text-brand-blue py-4 px-6 rounded-2xl flex items-center justify-center gap-3 font-semibold border border-brand-blue/10 hover:border-brand-blue/30">
-                    <i class="ph-fill ph-shopping-bag text-2xl text-orange-500"></i>
-                    Shopee
+                <!-- Botão Shopee (Branco) -->
+                <a href="#" target="_blank" class="btn-stitch bg-white text-brand-blue py-4 px-6 rounded-2xl flex items-center justify-center gap-3 font-semibold hover:bg-gray-100 transition-colors">
+                    <i class="ph-fill ph-shopping-bag text-2xl text-brand-orange"></i>
+                    Compre na Shopee
                 </a>
             </div>
         </div>
     </section>
 
     <!-- SECTION: FABRICAÇÃO PRÓPRIA -->
-    <section id="about" class="py-24 px-6 bg-white relative">
+    <section id="about" class="py-24 px-6 bg-[#031c42] relative">
         <div class="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-16 items-center">
             <div class="order-2 md:order-1 reveal relative">
                 <!-- Foto da empresa com efeito moldura futurista -->
@@ -240,24 +211,24 @@
                     <img src="https://images.unsplash.com/photo-1612051939106-96b658253a6f?q=80&w=1000&auto=format&fit=crop" alt="Máquinas de Bordado" class="w-full h-full object-cover">
                 </div>
                 <!-- Elemento decorativo gráfico -->
-                <div class="absolute -bottom-6 -right-6 w-32 h-32 bg-brand-orange rounded-full mix-blend-multiply blur-2xl opacity-50 z-0"></div>
+                <div class="absolute -bottom-6 -right-6 w-32 h-32 bg-brand-orange rounded-full mix-blend-multiply blur-2xl opacity-40 z-0"></div>
             </div>
             
             <div class="order-1 md:order-2 reveal">
-                <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-brand-blue/5 text-brand-orange text-sm font-bold tracking-widest uppercase mb-6">
+                <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/10 text-brand-orange text-sm font-bold tracking-widest uppercase mb-6">
                     <i class="ph-fill ph-needle"></i> Tradição e Tecnologia
                 </div>
-                <h2 class="font-heading text-4xl md:text-5xl font-black mb-6 leading-tight">
+                <h2 class="font-heading text-4xl md:text-5xl font-black mb-6 leading-tight text-white">
                     Fabricação <span class="text-brand-orange">Própria.</span><br>Qualidade Absoluta.
                 </h2>
-                <p class="text-lg text-brand-blue/70 mb-6 leading-relaxed">
+                <p class="text-lg text-brand-light/80 mb-6 leading-relaxed">
                     Na Liberty Bordados, cada fio conta uma história. Combinamos a precisão das mais modernas máquinas industriais com o cuidado do acabamento artesanal. 
                 </p>
-                <p class="text-lg text-brand-blue/70 mb-8 leading-relaxed">
+                <p class="text-lg text-brand-light/80 mb-8 leading-relaxed">
                     Nossa estrutura permite atender de pequenos pedidos a grandes produções corporativas, garantindo que a sua marca seja representada com a máxima excelência.
                 </p>
                 
-                <ul class="space-y-4 font-medium text-brand-blue">
+                <ul class="space-y-4 font-medium text-brand-light">
                     <li class="flex items-center gap-3"><i class="ph-fill ph-check-circle text-brand-orange text-xl"></i> Fios de alta durabilidade</li>
                     <li class="flex items-center gap-3"><i class="ph-fill ph-check-circle text-brand-orange text-xl"></i> Maquinário de última geração</li>
                     <li class="flex items-center gap-3"><i class="ph-fill ph-check-circle text-brand-orange text-xl"></i> Controle de qualidade rigoroso</li>
@@ -269,7 +240,7 @@
     <!-- SECTION: LOCALIZAÇÃO -->
     <section id="location" class="py-24 px-6 bg-brand-blue text-brand-light relative overflow-hidden">
         <div class="max-w-6xl mx-auto flex flex-col items-center text-center reveal">
-            <h2 class="font-heading text-4xl md:text-5xl font-black mb-4">Onde nos <span class="text-brand-orange">Encontrar</span></h2>
+            <h2 class="font-heading text-4xl md:text-5xl font-black mb-4 text-white">Onde nos <span class="text-brand-orange">Encontrar</span></h2>
             <p class="text-brand-light/70 max-w-2xl mb-12">
                 Venha nos visitar e conhecer de perto nossa linha de produção e showroom de produtos finais.
             </p>
@@ -290,7 +261,7 @@
                         <i class="ph-fill ph-map-pin text-2xl"></i>
                     </div>
                     <div>
-                        <h4 class="font-bold text-lg">Endereço</h4>
+                        <h4 class="font-bold text-lg text-white">Endereço</h4>
                         <p class="text-brand-light/70">Rua Exemplo das Confecções, 123<br>Bairro Industrial - SP</p>
                     </div>
                 </div>
@@ -299,7 +270,7 @@
                         <i class="ph-fill ph-clock text-2xl"></i>
                     </div>
                     <div>
-                        <h4 class="font-bold text-lg">Horário de Funcionamento</h4>
+                        <h4 class="font-bold text-lg text-white">Horário de Funcionamento</h4>
                         <p class="text-brand-light/70">Segunda a Sexta: 08h às 18h<br>Sábado: 08h às 12h</p>
                     </div>
                 </div>
@@ -308,7 +279,7 @@
     </section>
 
     <!-- FOOTER -->
-    <footer class="bg-[#021533] text-brand-light/50 py-8 text-center text-sm">
+    <footer class="bg-[#010e22] text-brand-light/50 py-8 text-center text-sm">
         <p>&copy; <span id="year"></span> Liberty Bordados. Todos os direitos reservados.</p>
     </footer>
 
@@ -320,7 +291,7 @@
         <div class="absolute inset-0 glass-dark" onclick="toggleCatalog()"></div>
         
         <!-- Modal Content -->
-        <div class="modal-content relative w-full h-full bg-brand-light flex flex-col overflow-hidden">
+        <div class="modal-content relative w-full h-full bg-brand-light flex flex-col overflow-hidden text-brand-blue">
             
             <!-- Header do Modal -->
             <div class="px-6 py-4 border-b border-brand-blue/10 flex justify-between items-center bg-white/50 backdrop-blur-md sticky top-0 z-10">
@@ -357,7 +328,7 @@
     <div id="adminModal" class="modal fixed inset-0 z-[60] flex items-center justify-center p-4">
         <div class="absolute inset-0 bg-black/60 backdrop-blur-sm" onclick="toggleAdmin()"></div>
         
-        <div class="modal-content relative w-full max-w-md bg-white rounded-3xl shadow-2xl overflow-hidden">
+        <div class="modal-content relative w-full max-w-md bg-white text-brand-blue rounded-3xl shadow-2xl overflow-hidden">
             
             <!-- Admin Header -->
             <div class="bg-brand-blue text-white p-6 relative">
@@ -377,7 +348,7 @@
                         <label class="block text-sm font-bold text-brand-blue mb-1">Senha de Acesso</label>
                         <input type="password" id="admin-pass" placeholder="••••••••" class="w-full px-4 py-3 rounded-xl bg-brand-light border-2 border-transparent focus:border-brand-orange focus:outline-none transition-colors">
                     </div>
-                    <button onclick="loginAdmin()" class="w-full bg-brand-blue text-white py-3 rounded-xl font-bold hover:bg-brand-orange transition-colors">Entrar</button>
+                    <button onclick="loginAdmin()" class="w-full bg-brand-blue text-white py-3 rounded-xl font-bold hover:bg-brand-blue/90 transition-colors">Entrar</button>
                 </div>
             </div>
 
@@ -393,7 +364,7 @@
                 <!-- Aba: Adicionar Produto/Categoria -->
                 <div id="admin-add-section">
                     <div class="mb-6 bg-brand-orange/10 p-4 rounded-xl border border-brand-orange/20">
-                        <h5 class="text-xs font-bold text-brand-orange mb-2">Adicionar Nova Categoria</h5>
+                        <h5 class="text-xs font-bold text-[#d85619] mb-2">Adicionar Nova Categoria</h5>
                         <div class="flex gap-2">
                             <input type="text" id="nova-categoria-nome" placeholder="Ex: Jaquetas" class="w-full px-3 py-1.5 rounded-lg bg-white border border-transparent focus:border-brand-orange focus:outline-none text-sm">
                             <button onclick="adicionarCategoria()" class="bg-brand-orange text-white px-3 py-1.5 rounded-lg text-sm font-bold hover:bg-[#e05a1b] transition-colors">Criar</button>
@@ -520,16 +491,6 @@
         }
         window.addEventListener('scroll', revealOnScroll);
         revealOnScroll(); // Trigger na carga inicial
-
-        // Efeito de sombra no header ao rolar
-        window.addEventListener('scroll', () => {
-            const header = document.getElementById('header');
-            if (window.scrollY > 50) {
-                header.classList.add('shadow-md');
-            } else {
-                header.classList.remove('shadow-md');
-            }
-        });
 
         // --- LÓGICA DO CATÁLOGO ---
         
