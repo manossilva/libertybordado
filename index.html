@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="pt-BR" class="scroll-smooth">
+<html lang="pt-BR" class="scroll-smooth">                    
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -145,7 +145,8 @@
 <body class="antialiased selection:bg-brand-orange selection:text-white relative">
 
     <!-- MAIN HERO & LINKS -->
-    <section id="hero" class="min-h-screen flex flex-col justify-center items-center py-16 px-6 relative overflow-hidden">
+    <!-- Ajuste: min-h-[100svh] ajuda a corrigir a altura em navegadores mobile, py-8 (antes py-16) diminui o espaço no topo e base -->
+    <section id="hero" class="min-h-[100svh] flex flex-col justify-center items-center py-8 px-6 relative overflow-hidden">
         <!-- Efeito de fundo (Fios de costura abstratos) -->
         <div class="absolute inset-0 opacity-10 pointer-events-none">
             <svg width="100%" height="100%" xmlns="http://www.w3.org/2000/svg">
@@ -154,52 +155,62 @@
             </svg>
         </div>
 
-        <div class="max-w-2xl w-full text-center z-10 reveal">
+        <div class="max-w-2xl w-full text-center z-10 reveal active">
             <!-- Logo Grande SEM FUNDO -->
-            <div class="mb-10 animate-float flex justify-center w-full max-w-[280px] md:max-w-md mx-auto">
-                 <!-- A logo agora vai se fundir perfeitamente com o fundo azul -->
+            <!-- Ajuste: mb-4 (antes mb-10) aproxima do texto, max-w-[220px] (antes 280px) reduz levemente a logo em telas menores -->
+            <div class="mb-4 animate-float flex justify-center w-full max-w-[220px] md:max-w-sm mx-auto">
                  <img src="https://hcdsbawdwzmlujxnxymf.supabase.co/storage/v1/object/public/video%20lp1/download-removebg-preview.png" alt="Liberty Bordados" class="w-full h-auto object-contain drop-shadow-[0_10px_25px_rgba(0,0,0,0.5)]">
             </div>
 
-            <p class="text-lg md:text-xl font-light mb-10 text-brand-light/80 max-w-lg mx-auto">
+            <!-- Ajuste: mb-6 (antes mb-10) aproxima dos botões, text-base no mobile economiza espaço vertical -->
+            <p class="text-base md:text-lg font-light mb-6 text-brand-light/80 max-w-lg mx-auto">
                 Bordados de alta qualidade com tecnologia e precisão. Conecte-se conosco.
             </p>
 
             <!-- Links em Grid -->
-            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 max-w-xl mx-auto">
+            <!-- Ajuste: gap-3 (antes gap-4) aproxima os botões -->
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 max-w-xl mx-auto">
                 
                 <!-- Botão Catálogo (Destaque Laranja da Logo) -->
-                <button onclick="toggleCatalog()" class="sm:col-span-2 btn-stitch bg-brand-orange text-white py-4 px-6 rounded-2xl flex items-center justify-center gap-3 font-bold text-lg hover:bg-[#e05a1b] transition-colors shadow-lg shadow-brand-orange/20">
+                <!-- Ajuste: py-3 (antes py-4) deixa os botões levemente mais finos para caber na tela -->
+                <button onclick="toggleCatalog()" class="sm:col-span-2 btn-stitch bg-brand-orange text-white py-3 px-6 rounded-2xl flex items-center justify-center gap-3 font-bold text-base hover:bg-[#e05a1b] transition-colors shadow-lg shadow-brand-orange/20">
                     <i class="ph-fill ph-book-open-text text-2xl"></i>
                     Ver Todos Produtos
                 </button>
 
                 <!-- Botão WhatsApp (Branco) -->
-                <a href="https://wa.me/seunumerodetelefone" target="_blank" class="btn-stitch bg-white text-brand-blue py-4 px-6 rounded-2xl flex items-center justify-center gap-3 font-semibold hover:bg-gray-100 transition-colors">
+                <a href="https://wa.me/seunumerodetelefone" target="_blank" class="btn-stitch bg-white text-brand-blue py-3 px-6 rounded-2xl flex items-center justify-center gap-3 font-semibold text-sm hover:bg-gray-100 transition-colors">
                     <i class="ph-fill ph-whatsapp-logo text-2xl text-green-500"></i>
                     Compre no Atacado
                 </a>
 
                 <!-- Botão TikTok (Branco) -->
-                <a href="#" target="_blank" class="btn-stitch bg-white text-brand-blue py-4 px-6 rounded-2xl flex items-center justify-center gap-3 font-semibold hover:bg-gray-100 transition-colors">
+                <a href="#" target="_blank" class="btn-stitch bg-white text-brand-blue py-3 px-6 rounded-2xl flex items-center justify-center gap-3 font-semibold text-sm hover:bg-gray-100 transition-colors">
                     <i class="ph-fill ph-tiktok-logo text-2xl text-black"></i>
                     Compre no TikTok
                 </a>
 
                 <!-- Botão Mercado Livre (Branco) -->
-                <a href="#" target="_blank" class="btn-stitch bg-white text-brand-blue py-4 px-6 rounded-2xl flex items-center justify-center gap-3 font-semibold hover:bg-gray-100 transition-colors">
+                <a href="#" target="_blank" class="btn-stitch bg-white text-brand-blue py-3 px-6 rounded-2xl flex items-center justify-center gap-3 font-semibold text-sm hover:bg-gray-100 transition-colors">
                     <i class="ph-fill ph-handshake text-2xl text-yellow-500"></i>
-                    Compre o Mercado Livre
+                    Mercado Livre
                 </a>
 
                 <!-- Botão Shopee (Branco) -->
-                <a href="#" target="_blank" class="btn-stitch bg-white text-brand-blue py-4 px-6 rounded-2xl flex items-center justify-center gap-3 font-semibold hover:bg-gray-100 transition-colors">
+                <a href="#" target="_blank" class="btn-stitch bg-white text-brand-blue py-3 px-6 rounded-2xl flex items-center justify-center gap-3 font-semibold text-sm hover:bg-gray-100 transition-colors">
                     <i class="ph-fill ph-shopping-bag text-2xl text-brand-orange"></i>
-                    Compre na Shopee
+                    Shopee
                 </a>
             </div>
         </div>
     </section>
+
+    <!-- Script para manter animação ativa no reload sem precisar de scroll -->
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            document.querySelectorAll('.reveal').forEach(el => el.classList.add('active'));
+        });
+    </script>
 
     <!-- SECTION: FABRICAÇÃO PRÓPRIA -->
     <section id="about" class="py-24 px-6 bg-[#031c42] relative">
@@ -725,4 +736,5 @@
 
     </script>
 </body>
+
 </html>
