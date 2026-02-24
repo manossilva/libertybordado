@@ -33,6 +33,7 @@
                     animation: {
                         'float': 'float 6s ease-in-out infinite',
                         'dash': 'dash 20s linear infinite',
+                        'success-pop': 'success-pop 0.5s ease-out forwards',
                     },
                     keyframes: {
                         float: {
@@ -41,6 +42,11 @@
                         },
                         dash: {
                             to: { strokeDashoffset: '1000' }
+                        },
+                        'success-pop': {
+                            '0%': { transform: 'scale(0.5)', opacity: '0' },
+                            '70%': { transform: 'scale(1.2)' },
+                            '100%': { transform: 'scale(1)', opacity: '1' }
                         }
                     }
                 }
@@ -59,13 +65,12 @@
         ::-webkit-scrollbar-track { background: #042353; }
         ::-webkit-scrollbar-thumb { background: #eae7e4; border-radius: 4px; }
 
-        /* Correção: Classe hide-scroll adicionada */
         .hide-scroll {
-            -ms-overflow-style: none;  /* IE and Edge */
-            scrollbar-width: none;  /* Firefox */
+            -ms-overflow-style: none;
+            scrollbar-width: none;
         }
         .hide-scroll::-webkit-scrollbar {
-            display: none; /* Chrome, Safari and Opera */
+            display: none;
         }
 
         .glass-dark {
@@ -279,7 +284,7 @@
     <div id="adminModal" class="modal fixed inset-0 z-[60] flex items-center justify-center p-4">
         <div class="absolute inset-0 bg-black/60 backdrop-blur-sm" onclick="toggleAdmin()"></div>
         
-        <div class="modal-content relative w-full max-w-md bg-white text-brand-blue rounded-3xl shadow-2xl overflow-hidden">
+        <div class="modal-content relative w-full max-w-md bg-white text-brand-blue rounded-3xl shadow-2xl overflow-hidden transition-all duration-300">
             <div class="bg-brand-blue text-white p-6 relative">
                 <button onclick="toggleAdmin()" class="absolute top-4 right-4 text-white/50 hover:text-white">
                     <i class="ph ph-x text-xl"></i>
@@ -291,69 +296,95 @@
             </div>
 
             <div id="admin-login-view" class="p-6">
-                <div class="space-y-4">
+                <div class="space-y-4" id="login-form">
+                    <div>
+                        <label class="block text-sm font-bold text-brand-blue mb-1">E-mail</label>
+                        <input type="email" id="admin-email" value="libertybordado@gmail.com" placeholder="seu@email.com" class="w-full px-4 py-3 rounded-xl bg-brand-light border-2 border-transparent focus:border-brand-orange focus:outline-none transition-colors text-brand-blue">
+                    </div>
                     <div>
                         <label class="block text-sm font-bold text-brand-blue mb-1">Senha de Acesso</label>
-                        <input type="password" id="admin-pass" placeholder="••••••••" class="w-full px-4 py-3 rounded-xl bg-brand-light border-2 border-transparent focus:border-brand-orange focus:outline-none transition-colors">
+                        <div class="relative">
+                            <input type="password" id="admin-pass" placeholder="••••••••" class="w-full px-4 py-3 rounded-xl bg-brand-light border-2 border-transparent focus:border-brand-orange focus:outline-none transition-colors pr-12 text-brand-blue">
+                            <button type="button" onclick="togglePasswordVisibility()" class="absolute right-4 top-1/2 -translate-y-1/2 text-brand-blue/50 hover:text-brand-orange transition-colors">
+                                <i id="eye-icon" class="ph ph-eye text-xl"></i>
+                            </button>
+                        </div>
                     </div>
-                    <button onclick="loginAdmin()" class="w-full bg-brand-orange text-white py-3 rounded-xl font-bold hover:bg-[#e05a1b] transition-colors">Entrar</button>
+                    <button id="btn-login" onclick="loginAdmin()" class="w-full bg-brand-orange text-white py-3 rounded-xl font-bold hover:bg-[#e05a1b] transition-colors flex justify-center items-center gap-2 mt-2">
+                        Entrar
+                    </button>
+                </div>
+
+                <div id="login-success-anim" class="hidden flex-col items-center justify-center py-8">
+                    <div class="w-16 h-16 bg-green-500 rounded-full flex items-center justify-center mb-4 animate-[success-pop_0.5s_ease-out]">
+                        <i class="ph-bold ph-check text-3xl text-white"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-brand-blue">Acesso Liberado!</h3>
+                    <p class="text-sm text-brand-blue/60 mt-1">Redirecionando...</p>
                 </div>
             </div>
 
-            <div id="admin-dashboard-view" class="p-6 hidden h-[70vh] overflow-y-auto">
-                <div class="flex gap-2 mb-6 border-b border-brand-blue/10 pb-2">
-                    <button onclick="switchAdminTab('add')" id="tab-add" class="text-sm font-bold text-brand-blue border-b-2 border-brand-orange pb-1">Novo Produto</button>
-                    <button onclick="switchAdminTab('manage')" id="tab-manage" class="text-sm font-bold text-brand-blue/50 hover:text-brand-blue pb-1">Gerenciar Catálogo</button>
+            <div id="admin-dashboard-view" class="p-6 hidden h-[70vh] flex flex-col">
+                <div class="flex justify-between items-center mb-6 border-b border-brand-blue/10 pb-2">
+                    <div class="flex gap-2">
+                        <button onclick="switchAdminTab('add')" id="tab-add" class="text-sm font-bold text-brand-blue border-b-2 border-brand-orange pb-1">Novo Produto</button>
+                        <button onclick="switchAdminTab('manage')" id="tab-manage" class="text-sm font-bold text-brand-blue/50 hover:text-brand-blue pb-1">Catálogo</button>
+                    </div>
+                    <button onclick="logoutAdmin()" class="text-xs font-bold text-red-500 hover:text-red-700 flex items-center gap-1 pb-1">
+                        <i class="ph ph-sign-out"></i> Sair
+                    </button>
                 </div>
 
-                <div id="admin-add-section">
-                    <div class="mb-6 bg-brand-orange/10 p-4 rounded-xl border border-brand-orange/20">
-                        <h5 class="text-xs font-bold text-[#d85619] mb-2">Adicionar Nova Categoria</h5>
-                        <div class="flex gap-2">
-                            <input type="text" id="nova-categoria-nome" placeholder="Ex: Jaquetas" class="w-full px-3 py-1.5 rounded-lg bg-white border border-transparent focus:border-brand-orange focus:outline-none text-sm">
-                            <button onclick="adicionarCategoria()" class="bg-brand-orange text-white px-3 py-1.5 rounded-lg text-sm font-bold hover:bg-[#e05a1b] transition-colors">Criar</button>
+                <div class="overflow-y-auto flex-1 hide-scroll" style="margin-right: -10px; padding-right: 10px;">
+                    <div id="admin-add-section">
+                        <div class="mb-6 bg-brand-orange/10 p-4 rounded-xl border border-brand-orange/20">
+                            <h5 class="text-xs font-bold text-[#d85619] mb-2">Adicionar Nova Categoria</h5>
+                            <div class="flex gap-2">
+                                <input type="text" id="nova-categoria-nome" placeholder="Ex: Jaquetas" class="w-full px-3 py-1.5 rounded-lg bg-white border border-transparent focus:border-brand-orange focus:outline-none text-sm text-brand-blue">
+                                <button onclick="adicionarCategoria()" class="bg-brand-orange text-white px-3 py-1.5 rounded-lg text-sm font-bold hover:bg-[#e05a1b] transition-colors">Criar</button>
+                            </div>
                         </div>
+
+                        <h4 class="font-bold text-brand-blue mb-4">Adicionar Novo Produto</h4>
+                        <form id="productForm" onsubmit="handleProductSubmit(event)" class="space-y-4">
+                            <div>
+                                <label class="block text-sm font-bold text-brand-blue mb-1">Nome do Produto</label>
+                                <input type="text" id="prod-nome" required placeholder="Ex: Camisa Polo Bordada" class="w-full px-4 py-2 rounded-xl bg-brand-light border-2 border-transparent focus:border-brand-orange focus:outline-none text-brand-blue">
+                            </div>
+
+                            <div>
+                                <label class="block text-sm font-bold text-brand-blue mb-1">Categoria</label>
+                                <select id="prod-categoria" required class="w-full px-4 py-2 rounded-xl bg-brand-light border-2 border-transparent focus:border-brand-orange focus:outline-none text-brand-blue"></select>
+                            </div>
+
+                            <div>
+                                <label class="block text-sm font-bold text-brand-blue mb-1">Descrição</label>
+                                <textarea id="prod-descricao" rows="2" placeholder="Breve descrição do produto..." class="w-full px-4 py-2 rounded-xl bg-brand-light border-2 border-transparent focus:border-brand-orange focus:outline-none text-sm text-brand-blue"></textarea>
+                            </div>
+
+                            <div>
+                                <label class="block text-sm font-bold text-brand-blue mb-1">Link da Foto (Google Drive ou URL)</label>
+                                <input type="url" id="prod-foto" required placeholder="https://..." class="w-full px-4 py-2 rounded-xl bg-brand-light border-2 border-transparent focus:border-brand-orange focus:outline-none text-sm text-brand-blue">
+                            </div>
+
+                            <div>
+                                <label class="block text-sm font-bold text-brand-blue mb-1">Texto do Botão</label>
+                                <input type="text" id="prod-btn-txt" required placeholder="Ex: Comprar no WhatsApp" value="Fazer Orçamento" class="w-full px-4 py-2 rounded-xl bg-brand-light border-2 border-transparent focus:border-brand-orange focus:outline-none text-brand-blue">
+                            </div>
+
+                            <button type="submit" class="w-full bg-brand-orange text-white py-3 rounded-xl font-bold hover:bg-[#e05a1b] transition-colors mt-2 flex justify-center items-center gap-2">
+                                <i class="ph-bold ph-plus"></i> Salvar Produto
+                            </button>
+                        </form>
                     </div>
 
-                    <h4 class="font-bold text-brand-blue mb-4">Adicionar Novo Produto</h4>
-                    <form id="productForm" onsubmit="handleProductSubmit(event)" class="space-y-4">
-                        <div>
-                            <label class="block text-sm font-bold text-brand-blue mb-1">Nome do Produto</label>
-                            <input type="text" id="prod-nome" required placeholder="Ex: Camisa Polo Bordada" class="w-full px-4 py-2 rounded-xl bg-brand-light border-2 border-transparent focus:border-brand-orange focus:outline-none">
-                        </div>
+                    <div id="admin-manage-section" class="hidden">
+                        <h4 class="font-bold text-brand-blue mb-4">Categorias</h4>
+                        <div id="admin-cat-list" class="space-y-2 mb-8"></div>
 
-                        <div>
-                            <label class="block text-sm font-bold text-brand-blue mb-1">Categoria</label>
-                            <select id="prod-categoria" required class="w-full px-4 py-2 rounded-xl bg-brand-light border-2 border-transparent focus:border-brand-orange focus:outline-none"></select>
-                        </div>
-
-                        <div>
-                            <label class="block text-sm font-bold text-brand-blue mb-1">Descrição</label>
-                            <textarea id="prod-descricao" rows="2" placeholder="Breve descrição do produto..." class="w-full px-4 py-2 rounded-xl bg-brand-light border-2 border-transparent focus:border-brand-orange focus:outline-none text-sm"></textarea>
-                        </div>
-
-                        <div>
-                            <label class="block text-sm font-bold text-brand-blue mb-1">Link da Foto (Google Drive ou URL)</label>
-                            <input type="url" id="prod-foto" required placeholder="https://..." class="w-full px-4 py-2 rounded-xl bg-brand-light border-2 border-transparent focus:border-brand-orange focus:outline-none text-sm">
-                        </div>
-
-                        <div>
-                            <label class="block text-sm font-bold text-brand-blue mb-1">Texto do Botão</label>
-                            <input type="text" id="prod-btn-txt" required placeholder="Ex: Comprar no WhatsApp" value="Fazer Orçamento" class="w-full px-4 py-2 rounded-xl bg-brand-light border-2 border-transparent focus:border-brand-orange focus:outline-none">
-                        </div>
-
-                        <button type="submit" class="w-full bg-brand-orange text-white py-3 rounded-xl font-bold hover:bg-[#e05a1b] transition-colors mt-2">
-                            <i class="ph-bold ph-plus"></i> Salvar Produto
-                        </button>
-                    </form>
-                </div>
-
-                <div id="admin-manage-section" class="hidden">
-                    <h4 class="font-bold text-brand-blue mb-4">Categorias</h4>
-                    <div id="admin-cat-list" class="space-y-2 mb-8"></div>
-
-                    <h4 class="font-bold text-brand-blue mb-4">Produtos</h4>
-                    <div id="admin-prod-list" class="space-y-2"></div>
+                        <h4 class="font-bold text-brand-blue mb-4">Produtos</h4>
+                        <div id="admin-prod-list" class="space-y-2"></div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -367,30 +398,24 @@
         const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImhjZHNiYXdkd3ptbHVqeG54eW1mIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Njk2OTgzMjksImV4cCI6MjA4NTI3NDMyOX0.wqZvGYlLeU-CIcikwKFauTCwmSH1VvJuVpccca3wpaU';
         const supabaseClient = window.supabase.createClient(supabaseUrl, supabaseKey);
 
-        // Arrays em memória
         let categoriesDB = [];
         let productsDB = [];
         let currentCategory = 'Todos';
 
-        // --- FUNÇÃO PARA BUSCAR DADOS DO SUPABASE ---
         async function carregarDados() {
             try {
-                // Traz Categorias
                 const { data: categoriasData, error: catError } = await supabaseClient.from('categoria').select('*');
                 if (catError) console.error("Erro ao carregar categorias:", catError.message);
                 else categoriesDB = categoriasData || [];
 
-                // Traz Produtos
                 const { data: produtosData, error: prodError } = await supabaseClient.from('produto').select('*').order('id', { ascending: false });
                 if (prodError) console.error("Erro ao carregar produtos:", prodError.message);
                 else productsDB = produtosData || [];
-                
             } catch (err) {
-                console.error("Erro geral na requisição:", err);
+                console.error("Erro geral:", err);
             }
         }
 
-        // --- LÓGICA DE INTERFACE: SCROLL ---
         function revealOnScroll() {
             var reveals = document.querySelectorAll('.reveal');
             for (var i = 0; i < reveals.length; i++) {
@@ -402,7 +427,6 @@
         window.addEventListener('scroll', revealOnScroll);
         revealOnScroll(); 
 
-        // --- LÓGICA DO CATÁLOGO ---
         const modalCatalog = document.getElementById('catalogModal');
         const gridCatalog = document.getElementById('catalog-grid');
 
@@ -411,9 +435,7 @@
             if(modalCatalog.classList.contains('active')) {
                 document.body.style.overflow = 'hidden';
                 gridCatalog.innerHTML = `<div class="col-span-full text-center py-10 text-brand-blue/50">Carregando catálogo...</div>`;
-                
                 await carregarDados(); 
-                
                 renderCategoriesUI();
                 renderCatalog();
             } else {
@@ -452,9 +474,7 @@
             let html = `<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">`;
             
             filteredProducts.forEach(prod => {
-                // CORREÇÃO: Tratamento de erros caso a imagem venha vazia do banco
                 let imgUrl = prod.foto_url || '';
-                
                 if(imgUrl && typeof imgUrl === 'string' && imgUrl.includes("drive.google.com/file/d/")) {
                     try {
                         const partes = imgUrl.split('/d/');
@@ -462,9 +482,7 @@
                             const id = partes[1].split('/')[0];
                             imgUrl = `https://drive.google.com/uc?export=view&id=${id}`;
                         }
-                    } catch (e) {
-                        console.error("Erro ao converter link da imagem do produto: ", prod.nome);
-                    }
+                    } catch (e) {}
                 }
 
                 const numeroWhats = "5511999999999"; 
@@ -498,60 +516,107 @@
         const modalAdmin = document.getElementById('adminModal');
         const viewLogin = document.getElementById('admin-login-view');
         const viewDash = document.getElementById('admin-dashboard-view');
+        const formLogin = document.getElementById('login-form');
+        const animSuccess = document.getElementById('login-success-anim');
+
+        // Mostra/Oculta Senha
+        function togglePasswordVisibility() {
+            const passInput = document.getElementById('admin-pass');
+            const eyeIcon = document.getElementById('eye-icon');
+            
+            if (passInput.type === 'password') {
+                passInput.type = 'text';
+                eyeIcon.classList.remove('ph-eye');
+                eyeIcon.classList.add('ph-eye-slash');
+            } else {
+                passInput.type = 'password';
+                eyeIcon.classList.remove('ph-eye-slash');
+                eyeIcon.classList.add('ph-eye');
+            }
+        }
 
         async function toggleAdmin() {
             modalAdmin.classList.toggle('active');
+            
+            // Reseta o estado quando fecha a janela
             if(!modalAdmin.classList.contains('active')) {
                 document.getElementById('admin-pass').value = '';
+                document.getElementById('admin-pass').type = 'password';
+                document.getElementById('eye-icon').className = 'ph ph-eye text-xl';
             } else {
-                if(!viewDash.classList.contains('hidden')) {
+                // Checa se já está logado no Supabase para pular o login
+                const { data } = await supabaseClient.auth.getSession();
+                if (data.session) {
+                    viewLogin.classList.add('hidden');
+                    viewDash.classList.remove('hidden');
                     await carregarDados();
                     renderAdminSelectCategories();
                     renderManageLists();
+                } else {
+                    viewDash.classList.add('hidden');
+                    viewLogin.classList.remove('hidden');
+                    formLogin.classList.remove('hidden');
+                    animSuccess.classList.add('hidden');
+                    animSuccess.classList.remove('flex');
                 }
             }
         }
 
-async function loginAdmin() {
-    // 1. Você define o seu e-mail de admin fixo aqui:
-    const emailAdminFixo = "libertybordado@gmail.com"; // Use o e-mail que você cadastrou no Supabase
-    
-    // 2. Pega apenas a senha que você digitou na tela:
-    const pass = document.getElementById('admin-pass').value;
-    const btnLogin = document.getElementById('btn-login');
+        async function loginAdmin() {
+            const emailInput = document.getElementById('admin-email').value.trim();
+            const passInput = document.getElementById('admin-pass').value;
+            const btnLogin = document.getElementById('btn-login');
 
-    if (!pass) {
-        alert("Digite a senha!");
-        return;
-    }
+            if (!emailInput || !passInput) {
+                alert("Preencha o e-mail e a senha!");
+                return;
+            }
 
-    const textoOriginal = btnLogin.innerHTML;
-    btnLogin.innerHTML = 'Verificando...';
-    btnLogin.disabled = true;
+            const textoOriginal = btnLogin.innerHTML;
+            btnLogin.innerHTML = '<i class="ph ph-spinner animate-spin text-xl"></i> Verificando...';
+            btnLogin.disabled = true;
 
-    // 3. Envia o e-mail fixo + a senha digitada para o Supabase validar
-    const { data, error } = await supabaseClient.auth.signInWithPassword({
-        email: emailAdminFixo,
-        password: pass,
-    });
+            const { data, error } = await supabaseClient.auth.signInWithPassword({
+                email: emailInput,
+                password: passInput,
+            });
 
-    btnLogin.innerHTML = textoOriginal;
-    btnLogin.disabled = false;
+            if (error) {
+                btnLogin.innerHTML = textoOriginal;
+                btnLogin.disabled = false;
+                alert('E-mail ou senha incorretos!');
+                document.getElementById('admin-pass').value = '';
+            } else {
+                // Sucesso: Esconde formulário, mostra animação
+                formLogin.classList.add('hidden');
+                animSuccess.classList.remove('hidden');
+                animSuccess.classList.add('flex');
+                
+                await carregarDados(); 
+                renderAdminSelectCategories();
+                renderManageLists();
 
-    if (error) {
-        alert('Senha incorreta!');
-        document.getElementById('admin-pass').value = '';
-    } else {
-        // Sucesso! A senha bateu com o banco de dados
-        document.getElementById('admin-login-view').classList.add('hidden');
-        document.getElementById('admin-dashboard-view').classList.remove('hidden');
-        document.getElementById('admin-pass').value = '';
-        
-        await carregarDados(); 
-        renderAdminSelectCategories();
-        renderManageLists();
-    }
-}
+                // Aguarda 1.5 segundos para exibir o painel
+                setTimeout(() => {
+                    viewLogin.classList.add('hidden');
+                    viewDash.classList.remove('hidden');
+                    
+                    // Reseta para a próxima vez
+                    btnLogin.innerHTML = textoOriginal;
+                    btnLogin.disabled = false;
+                    document.getElementById('admin-pass').value = '';
+                    formLogin.classList.remove('hidden');
+                    animSuccess.classList.add('hidden');
+                    animSuccess.classList.remove('flex');
+                }, 1500);
+            }
+        }
+
+        async function logoutAdmin() {
+            await supabaseClient.auth.signOut();
+            viewDash.classList.add('hidden');
+            viewLogin.classList.remove('hidden');
+        }
 
         function switchAdminTab(tab) {
             const btnAdd = document.getElementById('tab-add');
@@ -654,7 +719,7 @@ async function loginAdmin() {
             
             const btnSubmit = e.target.querySelector('button[type="submit"]');
             const textoOriginal = btnSubmit.innerHTML;
-            btnSubmit.innerHTML = 'Salvando...';
+            btnSubmit.innerHTML = '<i class="ph ph-spinner animate-spin"></i> Salvando...';
             btnSubmit.disabled = true;
 
             const novoProduto = {
@@ -708,4 +773,3 @@ async function loginAdmin() {
     </script>
 </body>
 </html>
-
