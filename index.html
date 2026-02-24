@@ -512,20 +512,46 @@
             }
         }
 
-        async function loginAdmin() {
-            const pass = document.getElementById('admin-pass').value;
-            if (pass === 'liberty123') { 
-                viewLogin.classList.add('hidden');
-                viewDash.classList.remove('hidden');
-                
-                await carregarDados(); 
-                
-                renderAdminSelectCategories();
-                renderManageLists();
-            } else {
-                alert('Senha incorreta!');
-            }
-        }
+async function loginAdmin() {
+    // 1. Você define o seu e-mail de admin fixo aqui:
+    const emailAdminFixo = "admin@libertybordados.com.br"; // Use o e-mail que você cadastrou no Supabase
+    
+    // 2. Pega apenas a senha que você digitou na tela:
+    const pass = document.getElementById('admin-pass').value;
+    const btnLogin = document.getElementById('btn-login');
+
+    if (!pass) {
+        alert("Digite a senha!");
+        return;
+    }
+
+    const textoOriginal = btnLogin.innerHTML;
+    btnLogin.innerHTML = 'Verificando...';
+    btnLogin.disabled = true;
+
+    // 3. Envia o e-mail fixo + a senha digitada para o Supabase validar
+    const { data, error } = await supabaseClient.auth.signInWithPassword({
+        email: emailAdminFixo,
+        password: pass,
+    });
+
+    btnLogin.innerHTML = textoOriginal;
+    btnLogin.disabled = false;
+
+    if (error) {
+        alert('Senha incorreta!');
+        document.getElementById('admin-pass').value = '';
+    } else {
+        // Sucesso! A senha bateu com o banco de dados
+        document.getElementById('admin-login-view').classList.add('hidden');
+        document.getElementById('admin-dashboard-view').classList.remove('hidden');
+        document.getElementById('admin-pass').value = '';
+        
+        await carregarDados(); 
+        renderAdminSelectCategories();
+        renderManageLists();
+    }
+}
 
         function switchAdminTab(tab) {
             const btnAdd = document.getElementById('tab-add');
