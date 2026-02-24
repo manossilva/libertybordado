@@ -1,22 +1,20 @@
 <!DOCTYPE html>
-<html lang="pt-BR" class="scroll-smooth">                    
+<html lang="pt-BR" class="scroll-smooth">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Liberty Bordados | Fabricação Própria</title>
     
-    <!-- Google Fonts: Montserrat para Títulos (futurista/forte) e Inter para Textos -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Montserrat:wght@700;800;900&display=swap" rel="stylesheet">
     
-    <!-- Phosphor Icons para ícones modernos -->
     <script src="https://unpkg.com/@phosphor-icons/web"></script>
 
-    <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
 
-    <!-- Configuração de Cores e Fontes -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
     <script>
         tailwind.config = {
             theme: {
@@ -25,7 +23,7 @@
                         brand: {
                             blue: '#042353',
                             light: '#eae7e4',
-                            orange: '#f26522', // Laranja adaptado do logo
+                            orange: '#f26522',
                         }
                     },
                     fontFamily: {
@@ -35,7 +33,6 @@
                     animation: {
                         'float': 'float 6s ease-in-out infinite',
                         'dash': 'dash 20s linear infinite',
-                        'gradient-x': 'gradient-x 12s ease infinite',
                     },
                     keyframes: {
                         float: {
@@ -44,10 +41,6 @@
                         },
                         dash: {
                             to: { strokeDashoffset: '1000' }
-                        },
-                        'gradient-x': {
-                            '0%, 100%': { 'background-size': '200% 200%', 'background-position': 'left center' },
-                            '50%': { 'background-size': '200% 200%', 'background-position': 'right center' },
                         }
                     }
                 }
@@ -56,30 +49,23 @@
     </script>
 
     <style>
-        /* Estilos Customizados: Efeito de Costura e Apple-like */
         body {
-            background-color: #042353; /* Cor de fundo da empresa */
-            color: #eae7e4; /* Texto claro por padrão */
+            background-color: #042353;
+            color: #eae7e4;
             overflow-x: hidden;
         }
 
-        /* Oculta scrollbar mas mantém funcionalidade para visual mais clean */
-        ::-webkit-scrollbar {
-            width: 8px;
-        }
-        ::-webkit-scrollbar-track {
-            background: #042353;
-        }
-        ::-webkit-scrollbar-thumb {
-            background: #eae7e4;
-            border-radius: 4px;
-        }
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: #042353; }
+        ::-webkit-scrollbar-thumb { background: #eae7e4; border-radius: 4px; }
 
-        .glass {
-            background: rgba(4, 35, 83, 0.7);
-            backdrop-filter: blur(16px);
-            -webkit-backdrop-filter: blur(16px);
-            border-bottom: 1px solid rgba(234, 231, 228, 0.1);
+        /* Correção: Classe hide-scroll adicionada */
+        .hide-scroll {
+            -ms-overflow-style: none;  /* IE and Edge */
+            scrollbar-width: none;  /* Firefox */
+        }
+        .hide-scroll::-webkit-scrollbar {
+            display: none; /* Chrome, Safari and Opera */
         }
 
         .glass-dark {
@@ -88,7 +74,6 @@
             -webkit-backdrop-filter: blur(20px);
         }
 
-        /* Efeito de botão de linha (bordado) futurista */
         .btn-stitch {
             position: relative;
             overflow: hidden;
@@ -98,13 +83,13 @@
             content: '';
             position: absolute;
             top: 2px; left: 2px; right: 2px; bottom: 2px;
-            border: 1px dashed rgba(242, 101, 34, 0); /* Linha transparente por padrão */
+            border: 1px dashed rgba(242, 101, 34, 0);
             border-radius: inherit;
             transition: all 0.4s ease;
             pointer-events: none;
         }
         .btn-stitch:hover::before {
-            border-color: rgba(242, 101, 34, 1); /* Laranja da logo no hover */
+            border-color: rgba(242, 101, 34, 1);
             animation: dash 5s linear infinite reverse;
         }
         .btn-stitch:hover {
@@ -112,7 +97,6 @@
             box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.3);
         }
 
-        /* Animações de Scroll */
         .reveal {
             opacity: 0;
             transform: translateY(30px);
@@ -123,7 +107,6 @@
             transform: translateY(0);
         }
 
-        /* Modal Transitions */
         .modal {
             opacity: 0;
             pointer-events: none;
@@ -144,10 +127,7 @@
 </head>
 <body class="antialiased selection:bg-brand-orange selection:text-white relative">
 
-    <!-- MAIN HERO & LINKS -->
-    <!-- Ajuste: min-h-[100svh] ajuda a corrigir a altura em navegadores mobile, py-8 (antes py-16) diminui o espaço no topo e base -->
-    <section id="hero" class="min-h-[100svh] flex flex-col justify-center items-center py-8 px-6 relative overflow-hidden">
-        <!-- Efeito de fundo (Fios de costura abstratos) -->
+    <section id="hero" class="min-h-screen flex flex-col justify-center items-center py-16 px-6 relative overflow-hidden">
         <div class="absolute inset-0 opacity-10 pointer-events-none">
             <svg width="100%" height="100%" xmlns="http://www.w3.org/2000/svg">
                 <path d="M-100,200 Q200,50 500,300 T1200,100" fill="none" stroke="#eae7e4" stroke-width="2" stroke-dasharray="10 15"/>
@@ -155,49 +135,37 @@
             </svg>
         </div>
 
-        <div class="max-w-2xl w-full text-center z-10 reveal active">
-            <!-- Logo Grande SEM FUNDO -->
-            <!-- Ajuste: mb-4 (antes mb-10) aproxima do texto, max-w-[220px] (antes 280px) reduz levemente a logo em telas menores -->
-            <div class="mb-4 animate-float flex justify-center w-full max-w-[220px] md:max-w-sm mx-auto">
-                 <img src="https://hcdsbawdwzmlujxnxymf.supabase.co/storage/v1/object/public/video%20lp1/download-removebg-preview.png" alt="Liberty Bordados" class="w-full h-auto object-contain drop-shadow-[0_20px_50px_rgba(0,0,0,0.5)]">
+        <div class="max-w-2xl w-full text-center z-10 reveal">
+            <div class="mb-10 animate-float flex justify-center w-full max-w-[280px] md:max-w-md mx-auto">
+                 <img src="https://hcdsbawdwzmlujxnxymf.supabase.co/storage/v1/object/public/video%20lp1/download-removebg-preview.png" alt="Liberty Bordados" class="w-full h-auto object-contain drop-shadow-[0_10px_25px_rgba(0,0,0,0.5)]">
             </div>
 
-            <!-- Ajuste: mb-6 (antes mb-10) aproxima dos botões, text-base no mobile economiza espaço vertical -->
-            <p class="text-base md:text-lg font-light mb-6 text-brand-light/80 max-w-lg mx-auto">
+            <p class="text-lg md:text-xl font-light mb-10 text-brand-light/80 max-w-lg mx-auto">
                 Bordados de alta qualidade com tecnologia e precisão. Conecte-se conosco.
             </p>
 
-            <!-- Links em Grid -->
-            <!-- Ajuste: gap-3 (antes gap-4) aproxima os botões -->
-            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 max-w-xl mx-auto">
-                
-                <!-- Botão Catálogo (Destaque Laranja da Logo) -->
-                <!-- Ajuste: py-3 (antes py-4) deixa os botões levemente mais finos para caber na tela -->
-                <button onclick="toggleCatalog()" class="sm:col-span-2 btn-stitch bg-brand-orange text-white py-3 px-6 rounded-2xl flex items-center justify-center gap-3 font-bold text-base hover:bg-[#e05a1b] transition-colors shadow-lg shadow-brand-orange/20">
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 max-w-xl mx-auto">
+                <button onclick="toggleCatalog()" class="sm:col-span-2 btn-stitch bg-brand-orange text-white py-4 px-6 rounded-2xl flex items-center justify-center gap-3 font-bold text-lg hover:bg-[#e05a1b] transition-colors shadow-lg shadow-brand-orange/20">
                     <i class="ph-fill ph-book-open-text text-2xl"></i>
                     Ver Todos Produtos
                 </button>
 
-                <!-- Botão WhatsApp (Branco) -->
-                <a href="https://wa.me/seunumerodetelefone" target="_blank" class="btn-stitch bg-white text-brand-blue py-3 px-6 rounded-2xl flex items-center justify-center gap-3 font-semibold text-sm hover:bg-gray-100 transition-colors">
+                <a href="https://wa.me/seunumerodetelefone" target="_blank" class="btn-stitch bg-white text-brand-blue py-4 px-6 rounded-2xl flex items-center justify-center gap-3 font-semibold hover:bg-gray-100 transition-colors">
                     <i class="ph-fill ph-whatsapp-logo text-2xl text-green-500"></i>
                     Compre no Atacado
                 </a>
 
-                <!-- Botão TikTok (Branco) -->
-                <a href="#" target="_blank" class="btn-stitch bg-white text-brand-blue py-3 px-6 rounded-2xl flex items-center justify-center gap-3 font-semibold text-sm hover:bg-gray-100 transition-colors">
+                <a href="#" target="_blank" class="btn-stitch bg-white text-brand-blue py-4 px-6 rounded-2xl flex items-center justify-center gap-3 font-semibold hover:bg-gray-100 transition-colors">
                     <i class="ph-fill ph-tiktok-logo text-2xl text-black"></i>
                     Compre no TikTok
                 </a>
 
-                <!-- Botão Mercado Livre (Branco) -->
-                <a href="#" target="_blank" class="btn-stitch bg-white text-brand-blue py-3 px-6 rounded-2xl flex items-center justify-center gap-3 font-semibold text-sm hover:bg-gray-100 transition-colors">
+                <a href="#" target="_blank" class="btn-stitch bg-white text-brand-blue py-4 px-6 rounded-2xl flex items-center justify-center gap-3 font-semibold hover:bg-gray-100 transition-colors">
                     <i class="ph-fill ph-handshake text-2xl text-yellow-500"></i>
-                    Compre no Mercado Livre
+                    Compre o Mercado Livre
                 </a>
 
-                <!-- Botão Shopee (Branco) -->
-                <a href="#" target="_blank" class="btn-stitch bg-white text-brand-blue py-3 px-6 rounded-2xl flex items-center justify-center gap-3 font-semibold text-sm hover:bg-gray-100 transition-colors">
+                <a href="#" target="_blank" class="btn-stitch bg-white text-brand-blue py-4 px-6 rounded-2xl flex items-center justify-center gap-3 font-semibold hover:bg-gray-100 transition-colors">
                     <i class="ph-fill ph-shopping-bag text-2xl text-brand-orange"></i>
                     Compre na Shopee
                 </a>
@@ -205,24 +173,13 @@
         </div>
     </section>
 
-    <!-- Script para manter animação ativa no reload sem precisar de scroll -->
-    <script>
-        document.addEventListener('DOMContentLoaded', () => {
-            document.querySelectorAll('.reveal').forEach(el => el.classList.add('active'));
-        });
-    </script>
-
-    <!-- SECTION: FABRICAÇÃO PRÓPRIA -->
     <section id="about" class="py-24 px-6 bg-[#031c42] relative">
         <div class="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-16 items-center">
             <div class="order-2 md:order-1 reveal relative">
-                <!-- Foto da empresa com efeito moldura futurista -->
                 <div class="relative rounded-3xl overflow-hidden aspect-square md:aspect-[4/5] shadow-2xl">
                     <div class="absolute inset-0 bg-brand-blue mix-blend-overlay opacity-20 z-10"></div>
-                    <!-- PLACEHOLDER FOTO DA EMPRESA -->
                     <img src="https://hcdsbawdwzmlujxnxymf.supabase.co/storage/v1/object/public/video%20lp1/Gemini_Generated_Image_q2pdseq2pdseq2pd.png" alt="Máquinas de Bordado" class="w-full h-full object-cover">
                 </div>
-                <!-- Elemento decorativo gráfico -->
                 <div class="absolute -bottom-6 -right-6 w-32 h-32 bg-brand-orange rounded-full mix-blend-multiply blur-2xl opacity-40 z-0"></div>
             </div>
             
@@ -249,7 +206,6 @@
         </div>
     </section>
 
-    <!-- SECTION: LOCALIZAÇÃO -->
     <section id="location" class="py-24 px-6 bg-brand-blue text-brand-light relative overflow-hidden">
         <div class="max-w-6xl mx-auto flex flex-col items-center text-center reveal">
             <h2 class="font-heading text-4xl md:text-5xl font-black mb-4 text-white">Onde nos <span class="text-brand-orange">Encontrar</span></h2>
@@ -258,7 +214,6 @@
             </p>
 
             <div class="w-full max-w-4xl bg-white/5 backdrop-blur-md border border-white/10 p-2 md:p-4 rounded-3xl shadow-2xl">
-                <!-- MAPA PLACEHOLDER (Substituir o src pelo iframe real do Google Maps) -->
                 <div class="w-full h-[400px] rounded-2xl overflow-hidden bg-brand-light relative">
                     <iframe 
                         src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3657.1975766258416!2d-46.65649438440669!3d-23.561349567475146!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x94ce59c8da0aa315%3A0xd59f9431f2c9776a!2sAv.%20Paulista%20-%20S%C3%A3o%20Paulo%2C%20SP!5e0!3m2!1spt-BR!2sbr!4v1679000000000!5m2!1spt-BR!2sbr" 
@@ -290,22 +245,14 @@
         </div>
     </section>
 
-    <!-- FOOTER -->
     <footer class="bg-[#010e22] text-brand-light/50 py-8 text-center text-sm">
-        <p>&copy; <span id="year"></span> Liberty Bordados. Todos os direitos reservados.</p>
+        <p>© <span id="year"></span> Liberty Bordados. Todos os direitos reservados.</p>
     </footer>
 
-    <!-- ========================================== -->
-    <!-- MODAL CATÁLOGO (Interface estilo Apple Store) -->
-    <!-- ========================================== -->
     <div id="catalogModal" class="modal fixed inset-0 z-50 flex items-center justify-center">
-        <!-- Overlay blur -->
         <div class="absolute inset-0 glass-dark" onclick="toggleCatalog()"></div>
         
-        <!-- Modal Content -->
         <div class="modal-content relative w-full h-full bg-brand-light flex flex-col overflow-hidden text-brand-blue">
-            
-            <!-- Header do Modal -->
             <div class="px-6 py-4 border-b border-brand-blue/10 flex justify-between items-center bg-white/50 backdrop-blur-md sticky top-0 z-10">
                 <div class="flex items-center gap-4">
                     <button onclick="toggleCatalog()" class="p-2 bg-brand-blue/10 hover:bg-brand-blue/20 text-brand-blue rounded-full transition-colors">
@@ -320,29 +267,19 @@
                 </button>
             </div>
 
-            <!-- Filtros de Categoria -->
-            <div id="category-filters" class="px-6 py-4 bg-brand-light flex gap-2 overflow-x-auto whitespace-nowrap hide-scroll">
-                <!-- Filtros injetados via JS -->
-            </div>
+            <div id="category-filters" class="px-6 py-4 bg-brand-light flex gap-2 overflow-x-auto whitespace-nowrap hide-scroll"></div>
 
-            <!-- Grid de Produtos (Populados via JS) -->
             <div class="p-6 overflow-y-auto flex-1 bg-brand-light" id="catalog-grid">
-                <!-- Os produtos serão injetados aqui via JS -->
                 <div class="text-center text-brand-blue/50 py-10 w-full col-span-full">Carregando catálogo...</div>
             </div>
         </div>
     </div>
 
 
-    <!-- ========================================== -->
-    <!-- MODAL ADMIN (Login e Cadastro de Produto)  -->
-    <!-- ========================================== -->
     <div id="adminModal" class="modal fixed inset-0 z-[60] flex items-center justify-center p-4">
         <div class="absolute inset-0 bg-black/60 backdrop-blur-sm" onclick="toggleAdmin()"></div>
         
         <div class="modal-content relative w-full max-w-md bg-white text-brand-blue rounded-3xl shadow-2xl overflow-hidden">
-            
-            <!-- Admin Header -->
             <div class="bg-brand-blue text-white p-6 relative">
                 <button onclick="toggleAdmin()" class="absolute top-4 right-4 text-white/50 hover:text-white">
                     <i class="ph ph-x text-xl"></i>
@@ -353,27 +290,22 @@
                 <p class="text-sm text-white/70 mt-1">Gerenciamento do Catálogo</p>
             </div>
 
-            <!-- Area de Login -->
             <div id="admin-login-view" class="p-6">
                 <div class="space-y-4">
                     <div>
                         <label class="block text-sm font-bold text-brand-blue mb-1">Senha de Acesso</label>
                         <input type="password" id="admin-pass" placeholder="••••••••" class="w-full px-4 py-3 rounded-xl bg-brand-light border-2 border-transparent focus:border-brand-orange focus:outline-none transition-colors">
                     </div>
-                    <button onclick="loginAdmin()" class="w-full bg-brand-blue text-white py-3 rounded-xl font-bold hover:bg-brand-blue/90 transition-colors">Entrar</button>
+                    <button onclick="loginAdmin()" class="w-full bg-brand-orange text-white py-3 rounded-xl font-bold hover:bg-[#e05a1b] transition-colors">Entrar</button>
                 </div>
             </div>
 
-            <!-- Area de Dashboard (Oculta até logar) -->
             <div id="admin-dashboard-view" class="p-6 hidden h-[70vh] overflow-y-auto">
-                
-                <!-- Abas -->
                 <div class="flex gap-2 mb-6 border-b border-brand-blue/10 pb-2">
                     <button onclick="switchAdminTab('add')" id="tab-add" class="text-sm font-bold text-brand-blue border-b-2 border-brand-orange pb-1">Novo Produto</button>
                     <button onclick="switchAdminTab('manage')" id="tab-manage" class="text-sm font-bold text-brand-blue/50 hover:text-brand-blue pb-1">Gerenciar Catálogo</button>
                 </div>
 
-                <!-- Aba: Adicionar Produto/Categoria -->
                 <div id="admin-add-section">
                     <div class="mb-6 bg-brand-orange/10 p-4 rounded-xl border border-brand-orange/20">
                         <h5 class="text-xs font-bold text-[#d85619] mb-2">Adicionar Nova Categoria</h5>
@@ -385,7 +317,6 @@
 
                     <h4 class="font-bold text-brand-blue mb-4">Adicionar Novo Produto</h4>
                     <form id="productForm" onsubmit="handleProductSubmit(event)" class="space-y-4">
-                        
                         <div>
                             <label class="block text-sm font-bold text-brand-blue mb-1">Nome do Produto</label>
                             <input type="text" id="prod-nome" required placeholder="Ex: Camisa Polo Bordada" class="w-full px-4 py-2 rounded-xl bg-brand-light border-2 border-transparent focus:border-brand-orange focus:outline-none">
@@ -393,9 +324,7 @@
 
                         <div>
                             <label class="block text-sm font-bold text-brand-blue mb-1">Categoria</label>
-                            <select id="prod-categoria" class="w-full px-4 py-2 rounded-xl bg-brand-light border-2 border-transparent focus:border-brand-orange focus:outline-none">
-                                <!-- Categorias injetadas via JS -->
-                            </select>
+                            <select id="prod-categoria" required class="w-full px-4 py-2 rounded-xl bg-brand-light border-2 border-transparent focus:border-brand-orange focus:outline-none"></select>
                         </div>
 
                         <div>
@@ -405,12 +334,11 @@
 
                         <div>
                             <label class="block text-sm font-bold text-brand-blue mb-1">Link da Foto (Google Drive ou URL)</label>
-                            <p class="text-[10px] text-gray-500 mb-1 leading-tight">Cole o link público da imagem.</p>
                             <input type="url" id="prod-foto" required placeholder="https://..." class="w-full px-4 py-2 rounded-xl bg-brand-light border-2 border-transparent focus:border-brand-orange focus:outline-none text-sm">
                         </div>
 
                         <div>
-                            <label class="block text-sm font-bold text-brand-blue mb-1">Texto do Botão / Redirecionamento</label>
+                            <label class="block text-sm font-bold text-brand-blue mb-1">Texto do Botão</label>
                             <input type="text" id="prod-btn-txt" required placeholder="Ex: Comprar no WhatsApp" value="Fazer Orçamento" class="w-full px-4 py-2 rounded-xl bg-brand-light border-2 border-transparent focus:border-brand-orange focus:outline-none">
                         </div>
 
@@ -420,7 +348,6 @@
                     </form>
                 </div>
 
-                <!-- Aba: Gerenciar (Lista de exclusão) -->
                 <div id="admin-manage-section" class="hidden">
                     <h4 class="font-bold text-brand-blue mb-4">Categorias</h4>
                     <div id="admin-cat-list" class="space-y-2 mb-8"></div>
@@ -432,87 +359,61 @@
         </div>
     </div>
 
-    <!-- ========================================== -->
-    <!-- SCRIPT PRINCIPAL & CONFIGURAÇÃO SUPABASE   -->
-    <!-- ========================================== -->
     <script>
-        // Set current year in footer
         document.getElementById('year').innerText = new Date().getFullYear();
 
-        /*
-         =============================================================================
-         CONFIGURAÇÃO DO BANCO DE DADOS (SUPABASE) - INSTRUÇÕES PARA O DESENVOLVEDOR
-         =============================================================================
-         
-         1. Crie uma conta no Supabase (supabase.com)
-         2. Crie um novo projeto.
-         3. No menu lateral, vá em "Table Editor" e crie uma tabela chamada 'produtos'.
-         4. Adicione as seguintes colunas EXATAMENTE com estes nomes:
-            - id (tipo UUID, deixe como Primary Key e default gen_random_uuid())
-            - created_at (tipo timestamptz, default now())
-            - nome (tipo text)
-            - descricao (tipo text)
-            - categoria (tipo text)
-            - foto_url (tipo text)
-            - texto_botao (tipo text)
-         4.1. Crie também uma tabela 'categorias':
-            - id (tipo UUID)
-            - nome (tipo text)
-         5. Desative a RLS (Row Level Security) temporariamente para testar, ou crie políticas de Inserção/Leitura/Deleção.
-         
-         6. Para ligar de verdade no front-end, importe o SDK do Supabase acima adicionando:
-            <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"><\/script>
-         
-         7. Inicialize o cliente aqui abaixo substituindo pelas suas chaves:
-            const supabaseUrl = 'https://SEU_PROJETO.supabase.co';
-            const supabaseKey = 'SUA_ANON_KEY';
-            const supabase = window.supabase.createClient(supabaseUrl, supabaseKey);
-         =============================================================================
-        */
+        // Configuração Supabase
+        const supabaseUrl = 'https://hcdsbawdwzmlujxnxymf.supabase.co';
+        const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImhjZHNiYXdkd3ptbHVqeG54eW1mIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Njk2OTgzMjksImV4cCI6MjA4NTI3NDMyOX0.wqZvGYlLeU-CIcikwKFauTCwmSH1VvJuVpccca3wpaU';
+        const supabaseClient = window.supabase.createClient(supabaseUrl, supabaseKey);
 
-        // MOCK DATA (Dados fictícios para visualização enquanto não liga o Supabase)
-        let categoriesDB = [
-            { id: 1, nome: "Camisas" },
-            { id: 2, nome: "Bonés" },
-            { id: 3, nome: "Uniformes" },
-            { id: 4, nome: "Outros" }
-        ];
-
-        let productsDB = [
-            { id: 1, nome: "Polo Corporativa", descricao: "Malha premium com bordado de alta definição no peito.", categoria: "Uniformes", foto_url: "https://images.unsplash.com/photo-1586363104862-3a5e2ab60d99?auto=format&fit=crop&q=80&w=400", texto_botao: "Orçar no WhatsApp" },
-            { id: 2, nome: "Boné Trucker Logo", descricao: "Ajustável, ideal para eventos e brindes corporativos.", categoria: "Bonés", foto_url: "https://images.unsplash.com/photo-1588850561407-ed78c282e89b?auto=format&fit=crop&q=80&w=400", texto_botao: "Pedir pelo WhatsApp" },
-            { id: 3, nome: "Avental Bordado", descricao: "Tecido resistente, perfeito para restaurantes e padarias.", categoria: "Outros", foto_url: "https://images.unsplash.com/photo-1623594248464-92742188ab1d?auto=format&fit=crop&q=80&w=400", texto_botao: "Verificar Disponibilidade" },
-            { id: 4, nome: "Camiseta Algodão Premium", descricao: "100% algodão, toque macio, com personalização nas costas e frente.", categoria: "Camisas", foto_url: "https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?auto=format&fit=crop&q=80&w=400", texto_botao: "Comprar Agora" }
-        ];
-
+        // Arrays em memória
+        let categoriesDB = [];
+        let productsDB = [];
         let currentCategory = 'Todos';
 
-        // --- LÓGICA DE INTERFACE ---
+        // --- FUNÇÃO PARA BUSCAR DADOS DO SUPABASE ---
+        async function carregarDados() {
+            try {
+                // Traz Categorias
+                const { data: categoriasData, error: catError } = await supabaseClient.from('categoria').select('*');
+                if (catError) console.error("Erro ao carregar categorias:", catError.message);
+                else categoriesDB = categoriasData || [];
 
-        // Revelar elementos ao rolar (Scroll Animation)
+                // Traz Produtos
+                const { data: produtosData, error: prodError } = await supabaseClient.from('produto').select('*').order('id', { ascending: false });
+                if (prodError) console.error("Erro ao carregar produtos:", prodError.message);
+                else productsDB = produtosData || [];
+                
+            } catch (err) {
+                console.error("Erro geral na requisição:", err);
+            }
+        }
+
+        // --- LÓGICA DE INTERFACE: SCROLL ---
         function revealOnScroll() {
             var reveals = document.querySelectorAll('.reveal');
             for (var i = 0; i < reveals.length; i++) {
                 var windowHeight = window.innerHeight;
                 var elementTop = reveals[i].getBoundingClientRect().top;
-                var elementVisible = 100;
-                if (elementTop < windowHeight - elementVisible) {
-                    reveals[i].classList.add('active');
-                }
+                if (elementTop < windowHeight - 100) reveals[i].classList.add('active');
             }
         }
         window.addEventListener('scroll', revealOnScroll);
-        revealOnScroll(); // Trigger na carga inicial
+        revealOnScroll(); 
 
         // --- LÓGICA DO CATÁLOGO ---
-        
         const modalCatalog = document.getElementById('catalogModal');
         const gridCatalog = document.getElementById('catalog-grid');
 
-        function toggleCatalog() {
+        async function toggleCatalog() {
             modalCatalog.classList.toggle('active');
             if(modalCatalog.classList.contains('active')) {
-                document.body.style.overflow = 'hidden'; // Evita rolar o fundo
+                document.body.style.overflow = 'hidden';
+                gridCatalog.innerHTML = `<div class="col-span-full text-center py-10 text-brand-blue/50">Carregando catálogo...</div>`;
+                
+                await carregarDados(); 
+                
                 renderCategoriesUI();
                 renderCatalog();
             } else {
@@ -537,10 +438,7 @@
             container.innerHTML = html;
         }
 
-        // Função que desenha os produtos (simula a leitura do Supabase)
         function renderCatalog() {
-            // Exemplo Supabase: const { data } = await supabase.from('produtos').select('*');
-            
             let filteredProducts = productsDB;
             if(currentCategory !== 'Todos') {
                 filteredProducts = productsDB.filter(p => p.categoria === currentCategory);
@@ -554,20 +452,29 @@
             let html = `<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">`;
             
             filteredProducts.forEach(prod => {
-                let imgUrl = prod.foto_url;
-                if(imgUrl.includes("drive.google.com/file/d/")) {
-                    const id = imgUrl.split('/d/')[1].split('/')[0];
-                    imgUrl = `https://drive.google.com/uc?export=view&id=${id}`;
+                // CORREÇÃO: Tratamento de erros caso a imagem venha vazia do banco
+                let imgUrl = prod.foto_url || '';
+                
+                if(imgUrl && typeof imgUrl === 'string' && imgUrl.includes("drive.google.com/file/d/")) {
+                    try {
+                        const partes = imgUrl.split('/d/');
+                        if (partes.length > 1) {
+                            const id = partes[1].split('/')[0];
+                            imgUrl = `https://drive.google.com/uc?export=view&id=${id}`;
+                        }
+                    } catch (e) {
+                        console.error("Erro ao converter link da imagem do produto: ", prod.nome);
+                    }
                 }
 
-                const numeroWhats = "5511999999999"; // Substitua pelo número real
+                const numeroWhats = "5511999999999"; 
                 const msg = encodeURIComponent(`Olá! Tenho interesse no produto: ${prod.nome} da categoria ${prod.categoria}.`);
                 const linkWhats = `https://wa.me/${numeroWhats}?text=${msg}`;
 
                 html += `
                 <div class="bg-white rounded-2xl p-3 shadow-lg hover:shadow-xl transition-shadow border border-brand-blue/5 flex flex-col group">
                     <div class="aspect-square rounded-xl overflow-hidden mb-4 bg-gray-100 relative">
-                        <img src="${imgUrl}" alt="${prod.nome}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" onerror="this.src='https://via.placeholder.com/400?text=Imagem+Indisponível'">
+                        <img src="${imgUrl}" alt="${prod.nome}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" onerror="this.src='https://via.placeholder.com/400?text=Sem+Foto'">
                         <div class="absolute top-2 right-2 bg-brand-light/90 backdrop-blur text-brand-blue text-xs font-bold px-2 py-1 rounded-full">
                             ${prod.categoria}
                         </div>
@@ -577,7 +484,7 @@
                     <div class="mt-auto pt-4">
                         <a href="${linkWhats}" target="_blank" class="w-full bg-brand-orange/10 text-brand-orange hover:bg-brand-orange hover:text-white transition-colors py-2 rounded-xl flex items-center justify-center gap-2 font-bold text-sm border border-brand-orange/20">
                             <i class="ph-fill ph-whatsapp-logo text-lg"></i>
-                            ${prod.texto_botao}
+                            ${prod.texto_botao || 'Fazer Orçamento'}
                         </a>
                     </div>
                 </div>
@@ -587,28 +494,32 @@
             gridCatalog.innerHTML = html;
         }
 
-
         // --- LÓGICA DA ÁREA ADMIN ---
-
         const modalAdmin = document.getElementById('adminModal');
         const viewLogin = document.getElementById('admin-login-view');
         const viewDash = document.getElementById('admin-dashboard-view');
 
-        function toggleAdmin() {
+        async function toggleAdmin() {
             modalAdmin.classList.toggle('active');
             if(!modalAdmin.classList.contains('active')) {
                 document.getElementById('admin-pass').value = '';
             } else {
-                renderAdminSelectCategories();
-                renderManageLists();
+                if(!viewDash.classList.contains('hidden')) {
+                    await carregarDados();
+                    renderAdminSelectCategories();
+                    renderManageLists();
+                }
             }
         }
 
-        function loginAdmin() {
+        async function loginAdmin() {
             const pass = document.getElementById('admin-pass').value;
             if (pass === 'liberty123') { 
                 viewLogin.classList.add('hidden');
                 viewDash.classList.remove('hidden');
+                
+                await carregarDados(); 
+                
                 renderAdminSelectCategories();
                 renderManageLists();
             } else {
@@ -638,7 +549,7 @@
 
         function renderAdminSelectCategories() {
             const select = document.getElementById('prod-categoria');
-            select.innerHTML = '';
+            select.innerHTML = '<option value="" disabled selected>Selecione uma categoria...</option>';
             categoriesDB.forEach(cat => {
                 select.innerHTML += `<option value="${cat.nome}">${cat.nome}</option>`;
             });
@@ -647,17 +558,19 @@
         function renderManageLists() {
             const catList = document.getElementById('admin-cat-list');
             catList.innerHTML = '';
+            if(categoriesDB.length === 0) catList.innerHTML = '<span class="text-xs text-gray-400">Nenhuma categoria encontrada.</span>';
             categoriesDB.forEach(cat => {
                 catList.innerHTML += `
                     <div class="flex justify-between items-center bg-brand-light/50 p-3 rounded-xl border border-brand-blue/5">
                         <span class="text-sm font-bold text-brand-blue">${cat.nome}</span>
-                        <button onclick="deletarCategoria(${cat.id})" class="text-red-500 hover:text-red-700 bg-red-100 p-2 rounded-lg transition-colors"><i class="ph ph-trash"></i></button>
+                        <button onclick="deletarCategoria('${cat.id}')" class="text-red-500 hover:text-red-700 bg-red-100 p-2 rounded-lg transition-colors"><i class="ph ph-trash"></i></button>
                     </div>
                 `;
             });
 
             const prodList = document.getElementById('admin-prod-list');
             prodList.innerHTML = '';
+            if(productsDB.length === 0) prodList.innerHTML = '<span class="text-xs text-gray-400">Nenhum produto encontrado.</span>';
             productsDB.forEach(prod => {
                 prodList.innerHTML += `
                     <div class="flex justify-between items-center bg-brand-light/50 p-3 rounded-xl border border-brand-blue/5">
@@ -665,44 +578,60 @@
                             <span class="text-sm font-bold text-brand-blue">${prod.nome}</span>
                             <span class="text-xs text-brand-blue/60">${prod.categoria}</span>
                         </div>
-                        <button onclick="deletarProduto(${prod.id})" class="text-red-500 hover:text-red-700 bg-red-100 p-2 rounded-lg transition-colors"><i class="ph ph-trash"></i></button>
+                        <button onclick="deletarProduto('${prod.id}')" class="text-red-500 hover:text-red-700 bg-red-100 p-2 rounded-lg transition-colors"><i class="ph ph-trash"></i></button>
                     </div>
                 `;
             });
         }
 
-        function adicionarCategoria() {
+        // --- CRUD NO SUPABASE ---
+
+        async function adicionarCategoria() {
             const nomeInput = document.getElementById('nova-categoria-nome');
             const nome = nomeInput.value.trim();
             if(!nome) return;
             
-            categoriesDB.push({ id: Date.now(), nome });
+            const { error } = await supabaseClient.from('categoria').insert([{ nome: nome }]);
+            
+            if (error) {
+                console.error(error);
+                alert('Erro ao salvar categoria: ' + error.message);
+                return;
+            }
+
             nomeInput.value = '';
+            await carregarDados(); 
             renderAdminSelectCategories();
             renderManageLists();
             if(modalCatalog.classList.contains('active')) renderCategoriesUI();
         }
 
-        function deletarCategoria(id) {
-            if(!confirm('Tem certeza que deseja deletar esta categoria? Os produtos associados não serão apagados automaticamente.')) return;
-            categoriesDB = categoriesDB.filter(c => c.id !== id);
+        async function deletarCategoria(id) {
+            if(!confirm('Tem certeza que deseja deletar esta categoria?')) return;
+            
+            const { error } = await supabaseClient.from('categoria').delete().eq('id', id);
+            
+            if (error) {
+                console.error(error);
+                alert('Erro ao excluir: ' + error.message);
+                return;
+            }
+
+            await carregarDados();
             renderAdminSelectCategories();
             renderManageLists();
             if(modalCatalog.classList.contains('active')) renderCategoriesUI();
         }
 
-        function deletarProduto(id) {
-            if(!confirm('Tem certeza que deseja deletar este produto?')) return;
-            productsDB = productsDB.filter(p => p.id !== id);
-            renderManageLists();
-            if(modalCatalog.classList.contains('active')) renderCatalog();
-        }
-
-        function handleProductSubmit(e) {
+        async function handleProductSubmit(e) {
             e.preventDefault();
             
+            const btnSubmit = e.target.querySelector('button[type="submit"]');
+            const textoOriginal = btnSubmit.innerHTML;
+            btnSubmit.innerHTML = 'Salvando...';
+            btnSubmit.disabled = true;
+
             const novoProduto = {
-                id: Date.now(), // Fake ID
                 nome: document.getElementById('prod-nome').value,
                 descricao: document.getElementById('prod-descricao').value,
                 categoria: document.getElementById('prod-categoria').value,
@@ -710,33 +639,46 @@
                 texto_botao: document.getElementById('prod-btn-txt').value
             };
 
-            /*
-            // CÓDIGO SUPABASE REAL PARA INSERIR:
-            const inserirNoBanco = async () => {
-                const { data, error } = await supabase.from('produtos').insert([novoProduto]);
-                if(error) alert('Erro ao salvar no banco');
-            }
-            inserirNoBanco();
-            */
-
-            // Simulando salvamento local na array mock
-            productsDB.unshift(novoProduto); // adiciona no topo
+            const { error } = await supabaseClient.from('produto').insert([novoProduto]);
             
-            alert('Produto adicionado com sucesso! (Modo Simulação)');
+            btnSubmit.innerHTML = textoOriginal;
+            btnSubmit.disabled = false;
+
+            if(error) {
+                console.error(error);
+                alert('Erro ao salvar no banco: ' + error.message);
+                return;
+            }
+
+            alert('Produto adicionado com sucesso!');
             document.getElementById('productForm').reset();
             
-            switchAdminTab('manage'); // Vai para a aba de gestão para ver o produto
+            await carregarDados();
+            switchAdminTab('manage'); 
             
-            // Se o catalogo estiver aberto, atualiza
             if(modalCatalog.classList.contains('active')) {
                 renderCategoriesUI();
                 renderCatalog();
             }
         }
 
+        async function deletarProduto(id) {
+            if(!confirm('Tem certeza que deseja deletar este produto?')) return;
+            
+            const { error } = await supabaseClient.from('produto').delete().eq('id', id);
+            
+            if (error) {
+                console.error(error);
+                alert('Erro ao excluir: ' + error.message);
+                return;
+            }
+
+            await carregarDados();
+            renderManageLists();
+            if(modalCatalog.classList.contains('active')) renderCatalog();
+        }
+
+        carregarDados();
     </script>
 </body>
-
 </html>
-
-
